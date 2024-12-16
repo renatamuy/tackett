@@ -60,7 +60,7 @@ The data and scripts provided here aim at making our study reproducible. You wil
 
 ## Feedback
 
-If you have any questions, corrections, or suggestions, please feel free to open an [issue](https://github.com/renatamuy/batmed/issues) or make a [pull request](https://github.com/renatamuy/batmed/pulls).
+If you have any questions, corrections, or suggestions, please feel free to open an [issue](https://github.com/renatamuy/tackett/issues) or make a [pull request](https://github.com/renatamuy/tackett/pulls).
 
 ## Acknowledgments
 

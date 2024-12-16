@@ -3,7 +3,7 @@
 # Muylaert et al., in prep. Connections in the Dark: Network Science and 
 # Social-Ecological Networks as Tools for Bat Conservation and Public Health.
 # Global Union of Bat Diversity Networks (GBatNet).
-# See README for further info: https://github.com/renatamuy/batmed
+# See README for further info: https://github.com/renatamuy/tackett
 
 
 if(!require(here)){
