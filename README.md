@@ -1,7 +1,5 @@
 # Tackett
 
-<!--# It's better to change this repo's name so we use the same standard as in the Kadambari dataset -->
-
 SEN workflow applied to the [Tackett dataset](https://doi.org/10.3390/d14030179). This repo is a supplement to the manuscript:
 
 *Muylaert et al., in prep. Connections in the Dark: Network Science and Social-Ecological Networks as Tools for Bat Conservation and Public Health.*
