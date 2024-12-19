@@ -56,9 +56,11 @@ if(!require(xlsx)){
   library(xlsx)
 }
 
-devtools::install_github('Ecological-Complexity-Lab/emln', force=T)
-library(emln)
-
+if(!require(emln)){
+  devtools::install_github('Ecological-Complexity-Lab/emln', force=T)
+  library(emln)
+}
+  
 
 ################################################################################
 
@@ -244,6 +246,26 @@ source("../code/layout_tripartite_type.R")
 source("../code/layout_tripartite_level.R")
 
 
+# Node and link attributes
+
+V(g2)$level <- ifelse(V(g2)$type == "species", "0", "variable")
+V(g2)$level <- ifelse(V(g2)$type == "body.part", "1", V(g2)$level)
+V(g2)$level <- ifelse(V(g2)$type == "cures", "2", V(g2)$level)
+V(g2)$level <- as.numeric(V(g2)$level)
+
+V(g2)$color <- ifelse(V(g2)$type == "species", "#DCC949", "#CD8862")
+V(g2)$color <- ifelse(V(g2)$type == "body.part", "#7D9D33", V(g2)$color)
+
+vertex_attr(g2)
+
+E(g2)$weight <- E(g2)$value
+E(g2)$width <- E(g2)$weight / max(E(g2)$weight) * 10  # Scale link widths
+E(g2)$curved <- 0.2 
+E(g2)$color <- V(g2)$color[ends(g2, es = E(g2), names = FALSE)[, 2]] #Fixed!
+
+edge_attr(g2)
+
+
 # Plot the network as tripartite
 
 V(g2)$type
@@ -258,7 +280,14 @@ edge_list_g2
 
 is_tripartite_coloring(g2)
 
-png(file = "../figures/kadambari_network_tripartite.png", 
+plot(g2,
+     layout = layout_in_circle)
+
+layout_expanded <- layout_tripartite_level(g2)
+layout_expanded <- layout_expanded * 3  # Scale the positions
+
+
+png(file = "../figures/tackett_network_tripartite.png", 
     width = 2000, 
     height = 2000, 
     unit='px', 
@@ -271,11 +300,11 @@ plot(
   g2,
   vertex.label.family = "Arial", 
   vertex.label.cex = 0.5,   
-  layout = layout_tripartite_level, 
-  vertex.size = 22,  
+  layout = layout_in_circle, 
+  #vertex.size = 22,  
   vertex.label.cex = 1.5,  
   vertex.label.color = "gray30", 
-  #vertex.label.dist=1.9,
+  #vertex.label.dist = 1.9,
   vertex.frame.color = "white",  
   edge.width = E(g2)$width,
   #edge.color = "gray63",
