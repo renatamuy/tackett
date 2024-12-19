@@ -78,7 +78,9 @@ list.files()
 
 df <- read.xlsx('Supplementary Materials-Table S3.xlsx', sheetIndex = 1, startRow=2)
 str(df)
+head(df)
 colnames(df)
+
 
 # Layers to explore 
 
@@ -88,6 +90,7 @@ unique(df$IUCN.Region)
 unique(df$species)
 unique(df$body.part)
 unique(df$cures)
+
 
 # Prep
 
@@ -100,6 +103,10 @@ df <- df %>%
 df <- df %>%
   mutate(across(everything(), ~ gsub("^unknown\\s*$", "unknown", .)))
 
+str(df)
+head(df)
+colnames(df)
+
 links <- df %>%
   count(species, body.part, cures) %>%
   rename(value = n) %>%
@@ -109,13 +116,89 @@ links <- df %>%
 nodes <- unique(c(links$source, links$target))
 nodes <- data.frame(name = nodes)
 
+str(nodes)
 head(nodes)
+tail(nodes)
+
+str(links)
 head(links)
+tail(links)
 
 g1 <- graph_from_data_frame(d = links, vertices = nodes, directed = TRUE)
 g1
 vertex_attr(g1)
 edge_attr(g1)
+plot(g1)
+
+
+# Alternative method for constructing the graph as tripartite
+
+head(df)
+
+df2 <- tibble(
+  species = df$species,
+  body.part = df$body.part,
+  cures = df$cures)
+
+
+df2
+
+# Check the unique values in each column
+unique_species <- unique(df2$species)
+unique_body_part <- unique(df2$body.part)
+unique_cures <- unique(df2$cures)
+
+# Verify none of these are empty
+if (length(unique_species) == 0 || length(unique_body_part) == 0 || length(unique_cures) == 0) {
+  stop("One or more columns in df2 are empty. Please check the input data.")
+}
+
+# Combine all nodes
+all_vertices <- c(unique_species, unique_body_part, unique_cures)
+
+
+# Create the node types
+vertex_types <- c(
+  rep("species", length(unique_species)),
+  rep("body.part", length(unique_body_part)),
+  rep("cures", length(unique_cures))
+)
+
+# Check that lengths match
+if (length(all_vertices) != length(vertex_types)) {
+  stop("Mismatch in lengths of vertices and their types. Check the input data.")
+}
+
+# Construct the node data frame
+vertex_list <- data.frame(
+  name = all_vertices,
+  type = vertex_types
+)
+
+# View the node list
+nodes2 <- vertex_list
+nodes2
+
+duplicates <- duplicated(nodes2$name)
+duplicates
+nodes2$name == "unknown"
+nodes2$name[duplicates] <- paste0(nodes2$name[duplicates], "_", seq_along(nodes2$name[duplicates]))
+nodes2
+
+
+links2 <- df2 %>%
+  count(species, body.part, cures) %>%
+  rename(value = n) %>%
+  pivot_longer(cols = c(body.part, cures), names_to = "target_type", values_to = "target") %>%
+  select(source = species, target, value)
+
+links2
+
+g2 <- graph_from_data_frame(d = links2, vertices = nodes2, directed = TRUE)
+g2
+vertex_attr(g2)
+edge_attr(g2)
+plot(g2)
 
 
 ################################ SANKEY ########################################
@@ -163,17 +246,17 @@ source("../code/layout_tripartite_level.R")
 
 # Plot the network as tripartite
 
-V(g1)$type
-V(g1)$level
-E(g1)$weight
-E(g1)$width
-degree(g1)
-which(degree(g1) == 0)
+V(g2)$type
+V(g2)$level
+E(g2)$weight
+E(g2)$width
+degree(g2)
+which(degree(g2) == 0)
 
-edge_list_g1 <- as_edgelist(g1)
-edge_list_g1
+edge_list_g2 <- as_edgelist(g2)
+edge_list_g2
 
-is_tripartite_coloring(g1)
+is_tripartite_coloring(g2)
 
 png(file = "../figures/kadambari_network_tripartite.png", 
     width = 2000, 
@@ -185,7 +268,7 @@ png(file = "../figures/kadambari_network_tripartite.png",
 par(mar = c(3, 3, 3, 3)) 
 
 plot(
-  g1,
+  g2,
   vertex.label.family = "Arial", 
   vertex.label.cex = 0.5,   
   layout = layout_tripartite_level, 
@@ -194,9 +277,9 @@ plot(
   vertex.label.color = "gray30", 
   #vertex.label.dist=1.9,
   vertex.frame.color = "white",  
-  edge.width = E(g1)$width,
+  edge.width = E(g2)$width,
   #edge.color = "gray63",
-  edge.color = E(g1)$color, 
+  edge.color = E(g2)$color, 
   main = "Fruit bat costs and benefits per state"
 )
 

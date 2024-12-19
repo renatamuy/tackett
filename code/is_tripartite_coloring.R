@@ -1,7 +1,3 @@
-# Load the igraph package
-library(igraph)
-
-# Function to check if a graph is k-partite
 is_tripartite_coloring <- function(graph) {
   n <- vcount(graph)            # Number of vertices
   colors <- rep(0, n)           # 0: uncolored, 1: color 1, 2: color 2, 3: color 3
@@ -31,16 +27,3 @@ is_tripartite_coloring <- function(graph) {
   }
   return(TRUE)  # All vertices were colored successfully
 }
-
-# Example usage
-
-# Create a tripartite graph
-edges <- c(1, 4, 1, 5, 2, 6, 2, 4, 3, 5, 3, 6)
-g <- graph(edges, directed = FALSE)
-plot(g)
-g
-
-
-# Check if the graph is tripartite
-result <- is_tripartite_coloring(g)
-print(result)  # TRUE if tripartite, FALSE otherwise
