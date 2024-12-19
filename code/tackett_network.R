@@ -21,11 +21,6 @@ if(!require(echarts4r)){
   library(echarts4r)
 }
 
-if(!require(emln)){
-  install.packages("emln")
-  library(emln)
-}
-
 if(!require(ggalluvial)){
   install.packages("ggalluvial")
   library(ggalluvial)
@@ -34,6 +29,11 @@ if(!require(ggalluvial)){
 if(!require(ggplot2)){
   install.packages("ggplot2")
   library(ggplot2)
+}
+
+if(!require(htmlwidgets)){
+  install.packages("htmlwidgets")
+  library(htmlwidgets)
 }
 
 if(!require(igraph)){
@@ -46,9 +46,19 @@ if(!require(networkD3)){
   library(networkD3)
 }
 
+if(!require(PhantomJS)){
+  install.packages("PhantomJS")
+  library(PhantomJS)
+}
+
 if(!require(tidyverse)){
   install.packages("tidyverse")
   library(tidyverse)
+}
+
+if(!require(webshot)){
+  install.packages("webshot")
+  library(webshot)
 }
 
 if(!require(xlsx)){
@@ -135,8 +145,6 @@ plot(g1)
 
 # Alternative method for constructing the graph as tripartite
 
-head(df)
-
 df2 <- tibble(
   species = df$species,
   body.part = df$body.part,
@@ -206,10 +214,18 @@ plot(g2)
 ################################ SANKEY ########################################
 
 
-links %>%
+sankey <- links %>%
   e_charts() %>%
   e_sankey(links, source = source, target = target, value = value) %>%
   e_theme("caravan")
+
+# Save chart as HTML
+html_file <- "../figures/sankey.html"
+saveWidget(sankey, html_file, selfcontained = TRUE)
+
+# Convert HTML to PNG
+png_file <- "../figures/tackett_network_sankey.png"
+webshot(html_file, png_file, vwidth = 3000, vheight = 2000)
 
 
 ################################ MULTILAYER ####################################
@@ -234,24 +250,45 @@ getwd()
 list.files()
 
 
-### Testing solutions to draw the network as tripartite
-
 # Functions to check if a graph is tripartite
+
 source("../code/is_tripartite_edges.R")
 source("../code/is_tripartite_coloring.R")
 
 
 # Custom layout for tripartite graph
+
 source("../code/layout_tripartite_type.R")
 source("../code/layout_tripartite_level.R")
 
 
-# Node and link attributes
+# Build the network
 
-V(g2)$level <- ifelse(V(g2)$type == "species", "0", "variable")
-V(g2)$level <- ifelse(V(g2)$type == "body.part", "1", V(g2)$level)
-V(g2)$level <- ifelse(V(g2)$type == "cures", "2", V(g2)$level)
-V(g2)$level <- as.numeric(V(g2)$level)
+colnames(df)
+
+edges_set1_set2 <- data.frame(from = df$species, to = df$body.part)
+edges_set2_set3 <- data.frame(from = df$body.part, to = df$cures)
+edges2 <- rbind(edges_set1_set2, edges_set2_set3)
+head(edges2)
+
+# Create graph
+g2 <- graph_from_data_frame(edges2, directed = FALSE)
+g2
+
+# Assign node groups
+V(g2)$group <- ifelse(V(g2)$name %in% df$species, 1,
+                      ifelse(V(g2)$name %in% df$body.part, 2, 3))
+V(g2)$group
+V(g2)$level <- V(g2)$group
+
+vertex_attr(g2)
+
+
+# Set node and link properties
+
+V(g2)$type <- ifelse(V(g2)$group == 1, "species", "variable")
+V(g2)$type <- ifelse(V(g2)$group == 2, "body.part", V(g2)$type)
+V(g2)$type <- ifelse(V(g2)$group == 3, "cures", V(g2)$type)
 
 V(g2)$color <- ifelse(V(g2)$type == "species", "#DCC949", "#CD8862")
 V(g2)$color <- ifelse(V(g2)$type == "body.part", "#7D9D33", V(g2)$color)
@@ -266,26 +303,7 @@ E(g2)$color <- V(g2)$color[ends(g2, es = E(g2), names = FALSE)[, 2]] #Fixed!
 edge_attr(g2)
 
 
-# Plot the network as tripartite
-
-V(g2)$type
-V(g2)$level
-E(g2)$weight
-E(g2)$width
-degree(g2)
-which(degree(g2) == 0)
-
-edge_list_g2 <- as_edgelist(g2)
-edge_list_g2
-
-is_tripartite_coloring(g2)
-
-plot(g2,
-     layout = layout_in_circle)
-
-layout_expanded <- layout_tripartite_level(g2)
-layout_expanded <- layout_expanded * 3  # Scale the positions
-
+# Tripartite graph
 
 png(file = "../figures/tackett_network_tripartite.png", 
     width = 2000, 
@@ -300,15 +318,47 @@ plot(
   g2,
   vertex.label.family = "Arial", 
   vertex.label.cex = 0.5,   
-  layout = layout_in_circle, 
-  #vertex.size = 22,  
+  layout = layout_tripartite_level, 
+  vertex.size = 10,  
   vertex.label.cex = 1.5,  
   vertex.label.color = "gray30", 
   #vertex.label.dist = 1.9,
   vertex.frame.color = "white",  
   edge.width = E(g2)$width,
   #edge.color = "gray63",
-  edge.color = E(g2)$color, 
+  edge.color = E(g2)$color,
+  edge.arrow.size = 0,
+  main = "Fruit bat costs and benefits per state"
+)
+
+dev.off()
+
+
+# Circular graph
+
+png(file = "../figures/tackett_network_circular.png", 
+    width = 2000, 
+    height = 2000, 
+    unit='px', 
+    res = 300, 
+    bg = "white")
+
+par(mar = c(3, 3, 3, 3)) 
+
+plot(
+  g2,
+  vertex.label.family = "Arial", 
+  vertex.label.cex = 0.5,   
+  layout = layout_in_circle, 
+  vertex.size = 10,  
+  vertex.label.cex = 1.5,  
+  vertex.label.color = "gray30", 
+  #vertex.label.dist = 1.9,
+  vertex.frame.color = "white",  
+  edge.width = E(g2)$width,
+  #edge.color = "gray63",
+  edge.color = E(g2)$color,
+  edge.arrow.size = 0,
   main = "Fruit bat costs and benefits per state"
 )
 
