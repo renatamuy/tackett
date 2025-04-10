@@ -294,7 +294,7 @@ png(file = "../figures/tackett_network_alluvial.png",
     height = 2000, 
     unit='px', 
     res = 300, 
-    bg = "white")
+    bg = "transparent")
 
 ggplot(data = df,
        aes(axis1 = species, axis2 = body.part, axis3 = cures)) +
@@ -367,7 +367,7 @@ png(file = "../figures/tackett_network_circular.png",
     height = 2000, 
     unit='px', 
     res = 300, 
-    bg = "white")
+    bg = "transparent")
 
 par(mar = c(3, 3, 3, 3)) 
 
