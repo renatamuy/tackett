@@ -334,9 +334,9 @@ source("../code/layout_tripartite_level.R")
 # Tripartite graph
 
 png(file = "../figures/tackett_network_tripartite.png", 
-    width = 2000, 
-    height = 2000, 
-    unit='px', 
+    width = 12, 
+    height = 12, 
+    unit='cm', 
     res = 300, 
     bg = "white")
 
@@ -348,13 +348,13 @@ plot(
   vertex.label.cex = 0.5,   
   layout = layout_tripartite_level, 
   vertex.size = 10,  
-  vertex.label.cex = 1.5,  
+  vertex.label.cex = 2.5,  
   vertex.label.color = "gray30", 
   vertex.frame.color = "white",  
   edge.width = E(g3)$weight,
   edge.color = E(g3)$color,
   edge.arrow.size = 0,
-  main = "Fruit bat costs and benefits per state"
+  main = "Medicinal use of bats"
 )
 
 dev.off()
@@ -363,9 +363,9 @@ dev.off()
 # Circular graph
 
 png(file = "../figures/tackett_network_circular.png", 
-    width = 2000, 
-    height = 2000, 
-    unit='px', 
+    width = 12, 
+    height = 12, 
+    unit='cm', 
     res = 300, 
     bg = "transparent")
 
@@ -377,13 +377,13 @@ plot(
   vertex.label.cex = 0.5,   
   layout = layout_in_circle, 
   vertex.size = 10,  
-  vertex.label.cex = 1.5,  
+  vertex.label.cex = 2.5,  
   vertex.label.color = "gray30", 
   vertex.frame.color = "white",  
   edge.width = E(g3)$weight,
   edge.color = E(g3)$color,
   edge.arrow.size = 0,
-  main = "Fruit bat costs and benefits per state"
+  main = "Medicinal use of bats"
 )
 
 dev.off()
