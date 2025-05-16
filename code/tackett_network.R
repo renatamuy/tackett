@@ -232,9 +232,6 @@ webshot(html_file, png_file, vwidth = 3000, vheight = 2000)
 
 ################################ ALLUVIAL ######################################
 
-# This is my favorite so far, but I still want to improve its visualization,
-# especially regarding node label overlap. We could also change the grey tone
-# of the strata.
 
 png(file = "../figures/tackett_network_alluvial.png", 
     width = 6000, 
