@@ -14,7 +14,7 @@ Contact: [renatamuy\@gmail.com](mailto:renatamuy@gmail.com){.email}.
 
 Originally published on December 9th, 2024.
 
-Run in R version 4.4.2 (2024-10-31) -- "Pile of Leaves".
+Run in R version 4.4.3 (2025-02-28) -- "Trophy Case"
 
 ## Disclaimer
 
@@ -54,7 +54,26 @@ The data and scripts provided here aim at making our study reproducible. You wil
 
 ## List of folders and files
 
+### Folders
+
+1.  `code`: scripts and UDFs needed to run our analyses.
+
+2.  `data`: supplementary tables with data.
+
+3.  `figures`: graphs representing the studied network.
+
+### Files
+
+1.  `README.md`: this readme file.
+2.  `tackett.Rproj`: R project file.
+
 ## Instructions
+
+1.  Update R and RStudio to their latest versions;
+
+2.  Open de folder `code`;
+
+3.  Open the script `tackett_network.R`, and follow the instructions provided in it.
 
 ## Feedback
 
@@ -62,4 +81,8 @@ If you have any questions, corrections, or suggestions, please feel free to open
 
 ## Acknowledgments
 
+This work is a product of the SEN Working Group of the Global Union of Bat Diversity Networks (GBatNet). GBatNet activities are supported by the National Science Foundation AccelNet Award Numbers 2020595, 2020577, and 2020565. Any opinions, findings, conclusions, or recommendations expressed in this work are those of the author(s) and do not necessarily reflect the views of the National Science Foundation. We are deeply grateful to the authors of all primary studies included in our systematic review, whose empirical work made our synthesis possible.
+
 ## Funding
+
+RLM was supported by the Morris Trust through Massey University Foundation. MARM was supported by grants, fellowships, and scholarships given to him and his team by the Alexander von Humboldt Foundation (AvH, 1134644), São Paulo Research Foundation (FAPESP, 2023/03083-6, 2023/02881-6, and 2023/17728-9), National Council for Scientific and Technological Development (CNPq, 305204/2024-6), National Science Foundation (NSF, 2020565), and Consulate General of France in São Paulo. ER was funded by Grant no. 885120 of the European Union’s Horizon 2020 Research and Innovation Programme. We are also grateful to FAPESP, CNPq, Coordination for the Improvement of Higher Education Personnel (CAPES), and German Academic Exchange Service (DAAD) for the scholarships and fellowships granted to our students and postdocs. GBatNet activities are supported by the National Science Foundation AccelNet Award Numbers 2020595, 2020577, and 2020565.

@@ -1,86 +1,33 @@
-# Tackett
-# This repo is a supplement to the manuscript:
+# This script is a supplement to the manuscript:
 # Muylaert et al., in prep. Connections in the Dark: Network Science and 
 # Social-Ecological Networks as Tools for Bat Conservation and Public Health.
 # Global Union of Bat Diversity Networks (GBatNet).
 # See README for further info: https://github.com/renatamuy/tackett
 
 
-if(!require(here)){
-  install.packages("here")
-  library(here)
+#Load or install the required packages
+packages <- c("here", "echarts4r", "ggalluvial",
+              "ggplot2", "ggraph", "ggrepel", "htmlwidgets",
+              "igraph", "networkD3", "tidyverse", "tidygraph",
+              "webshot", "xlsx", "devtools", "rJava")
+
+for (pkg in packages) {
+  if (!require(pkg, character.only = TRUE)) {
+    install.packages(pkg)
+    library(pkg, character.only = TRUE)
+  }
 }
 
-if(!require(dplyr)){
-  install.packages("dplyr")
-  library(dplyr)
-}
 
-if(!require(echarts4r)){
-  install.packages("echarts4r")
-  library(echarts4r)
+if (!requireNamespace("emln", quietly = TRUE)) {
+  message("'emln' package not found. Installing from GitHub...")
+  devtools::install_github("Ecological-Complexity-Lab/emln", force = TRUE)
+} else {
+  message("'emln' package is already installed.")
 }
+library(emln)
+message("'emln' package loaded successfully.")
 
-if(!require(ggalluvial)){
-  install.packages("ggalluvial")
-  library(ggalluvial)
-}
-
-if(!require(ggplot2)){
-  install.packages("ggplot2")
-  library(ggplot2)
-}
-
-if(!require(ggraph)){
-  install.packages("ggraph")
-  library(ggraph)
-}
-
-if(!require(ggrepel)){
-  install.packages("ggrepel")
-  library(ggrepel)
-}
-
-if(!require(htmlwidgets)){
-  install.packages("htmlwidgets")
-  library(htmlwidgets)
-}
-
-if(!require(igraph)){
-  install.packages("igraph")
-  library(igraph)
-}
-
-if(!require(networkD3)){
-  install.packages("networkD3")
-  library(networkD3)
-}
-
-if(!require(tidyverse)){
-  install.packages("tidyverse")
-  library(tidyverse)
-}
-
-if(!require(tidygraph)){
-  install.packages("tidygraph")
-  library(tidygraph)
-}
-
-if(!require(webshot)){
-  install.packages("webshot")
-  library(webshot)
-}
-
-if(!require(xlsx)){
-  install.packages("xlsx")
-  library(xlsx)
-}
-
-if(!require(emln)){
-  devtools::install_github('Ecological-Complexity-Lab/emln', force=T)
-  library(emln)
-}
-  
 
 ################################################################################
 
