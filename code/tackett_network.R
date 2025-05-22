@@ -1,8 +1,7 @@
 # This script is a supplement to the manuscript:
 # Muylaert et al., in prep.
-# Global Union of Bat Diversity Networks (GBatNet).
 # See README for further info: https://github.com/renatamuy/tackett
-
+# Original data source: Tacket et al. (2022)  - https://doi.org/10.3390/d14030179
 
 #Load or install the required packages
 packages <- c("here", "echarts4r", "ggalluvial",
