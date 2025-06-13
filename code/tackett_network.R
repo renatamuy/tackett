@@ -98,6 +98,9 @@ edges_set2_set3 <- data.frame(from = df$body.part, to = df$cures)
 edges3 <- rbind(edges_set1_set2, edges_set2_set3)
 head(edges3)
 
+edges3 <- edges3 %>% 
+  filter(!(from == 'unknown' & to == 'unknown'))
+
 
 # Create graph
 g2 <- graph_from_data_frame(edges3, directed = FALSE)
@@ -149,9 +152,9 @@ source("../code/layout_tripartite_level.R")
 # Tripartite graph
 png(file = "../figures/tackett_network.png", 
     width = 4000, 
-    height = 3000, 
+    height = 4000, 
     unit='px', 
-    res = 300, 
+    res = 400, 
     bg = "white")
 
 par(mar = c(3, 3, 3, 3)) 
@@ -159,13 +162,14 @@ par(mar = c(3, 3, 3, 3))
 plot(
   g2,
   vertex.label.family = "Arial", 
-  vertex.label.cex = 0.5,   
+  vertex.label.font = 3,
+  vertex.label.cex = 1,   
   layout = layout_tripartite_level, 
   vertex.size = 10,  
-  vertex.label.cex = 2.5,  
+  vertex.label.cex = 3,  
   vertex.label.color = "gray30", 
   vertex.frame.color = "white",  
-  edge.width = E(g2)$weight,
+  edge.width = E(g2)$weight + 0.01,
   edge.color = E(g2)$color,
   edge.arrow.size = 0,
   main = "Medicinal use of bats"
